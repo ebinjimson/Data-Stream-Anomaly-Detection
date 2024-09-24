@@ -1,18 +1,42 @@
 from sklearn.ensemble import IsolationForest
+import numpy as np
 
-def detect_anomalies(data, contamination=0.05):
+class AnomalyDetector:
     """
-    Detect anomalies in the input data using Isolation Forest algorithm.
-    
-    Args:
-        data (numpy.ndarray): Input data array.
-        contamination (float, optional): Percentage of anomalies in the data. Defaults to 0.05.
-    
-    Returns:
-        numpy.ndarray: Array of anomaly labels (-1 for anomaly, 1 for normal).
+    A class for detecting anomalies in a data stream using the Isolation Forest algorithm.
+
+    Attributes:
+    model (IsolationForest): The Isolation Forest model used for anomaly detection.
     """
-    model = IsolationForest(contamination=contamination)
-    data_reshaped = data.reshape(-1, 1)  # Reshape for model input
-    model.fit(data_reshaped)
-    anomalies = model.predict(data_reshaped)
-    return anomalies
+
+    def __init__(self, contamination=0.05):
+        """
+        Initialize the AnomalyDetector with a specified contamination rate.
+
+        Parameters:
+        contamination (float): The proportion of outliers in the data set.
+        """
+        self.model = IsolationForest(contamination=contamination)
+
+    def fit(self, data_stream):
+        """
+        Fit the Isolation Forest model to the provided data stream.
+
+        Parameters:
+        data_stream (np.ndarray): The input data stream to fit the model.
+        """
+        self.model.fit(data_stream.reshape(-1, 1))  # Reshape for fitting
+
+    def detect_anomalies(self, data_stream):
+        """
+        Detect anomalies in the incoming data stream.
+
+        Parameters:
+        data_stream (np.ndarray): The input data stream to check for anomalies.
+
+        Returns:
+        np.ndarray: An array containing the detected anomalies.
+        """
+        scores = self.model.predict(data_stream.reshape(-1, 1))  # Predict anomalies
+        anomalies = data_stream[scores == -1]  # Extract anomalies (-1 indicates anomaly)
+        return anomalies

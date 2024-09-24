@@ -1,19 +1,22 @@
 import matplotlib.pyplot as plt
 
-def visualize_data_stream(data, anomalies):
+def visualize_data(data_stream, anomalies):
     """
     Visualize the data stream and highlight detected anomalies.
+
+    Parameters:
+    data_stream (np.ndarray): The complete data stream to visualize.
+    anomalies (np.ndarray): An array containing detected anomalies.
     
-    Args:
-        data (numpy.ndarray): Data stream values.
-        anomalies (numpy.ndarray): Array of anomaly labels (-1 for anomaly, 1 for normal).
+    This function creates a line plot of the data stream and overlays 
+    scatter points for detected anomalies in red.
     """
-    plt.figure(figsize=(10, 6))
-    plt.plot(data, label='Data Stream', color='blue')
-    plt.scatter(np.where(anomalies == -1)[0], data[anomalies == -1], color='red', label='Anomalies')
-    plt.title('Data Stream with Anomalies')
-    plt.xlabel('Index')
-    plt.ylabel('Value')
-    plt.legend()
-    plt.show()
-    
+    plt.figure(figsize=(10, 5))  # Set figure size
+    plt.plot(data_stream, label='Data Stream')  # Plot the full data stream
+    if len(anomalies) > 0:
+        plt.scatter(np.where(data_stream == anomalies)[0], anomalies, color='red', label='Anomalies')  # Highlight anomalies
+    plt.title('Data Stream with Anomalies')  # Title of the plot
+    plt.xlabel('Time')  # X-axis label
+    plt.ylabel('Value')  # Y-axis label
+    plt.legend()  # Show legend
+    plt.show()  # Display the plot
