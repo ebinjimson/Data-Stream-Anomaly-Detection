@@ -39,4 +39,5 @@ class AnomalyDetector:
         """
         scores = self.model.predict(data_stream.reshape(-1, 1))  # Predict anomalies
         anomalies = data_stream[scores == -1]  # Extract anomalies (-1 indicates anomaly)
+        
         return anomalies
