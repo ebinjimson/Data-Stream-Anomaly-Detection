@@ -1,5 +1,5 @@
 import numpy as np
-from data_stream import generate_data_stream
+from data_stream_simulation import generate_data_stream
 from anomaly_detection import AnomalyDetector
 from visualization import visualize_data
 
